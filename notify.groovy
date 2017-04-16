@@ -24,7 +24,8 @@ node {
 def notifySuccessful() { 
     emailext (
       subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+      body: """<h2>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</h2>
+        <p>The Reason is <pre>${CAUSE}</pre></p><br>
         <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
       to: 'dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn'
@@ -34,7 +35,8 @@ def notifySuccessful() {
 def notifyFailed() {
    emailext (
       subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+      body: """<h2>Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</h2>
+        <p>The Reason is <pre>${CAUSE}</pre></p><br>
         <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
       to: 'dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn'
