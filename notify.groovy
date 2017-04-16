@@ -1,6 +1,6 @@
 node {
     try {
-        docker.image("ericchu0302/ubuntu14.04-mtk:v2").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/HomeGatewayCheckout:/home/bba/git-src") {
+        docker.image("${dockerimage}").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/HomeGatewayCheckout:/home/bba/git-src") {
             sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 env_build'
             sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 boot_build'
             sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 kernel_build'
@@ -21,11 +21,12 @@ node {
     }
 }
 
+def dockerimage = "ericchu0302/ubuntu14.04-mtk:v2"
+
 def notifySuccessful() { 
     emailext (
       subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """<h2>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</h2>
-        <p>The Reason is <pre>${CAUSE}</pre></p><br>
+      body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
         <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
       to: 'dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn'
@@ -35,9 +36,11 @@ def notifySuccessful() {
 def notifyFailed() {
    emailext (
       subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """<h2>Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</h2>
-        <p>The Reason is <pre>${CAUSE}</pre></p><br>
-        <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+      body: """<p>构建失败: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+        <p>项目：'${env.JOB_NAME}'</p>
+        <p>第'${env.BUILD_NUMBER}'次构建</p>
+        <p>镜像：'${dockerimage}'</p>
+        <p><a href='${env.BUILD_URL}'>点击查看详细内容</a></p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
       to: 'dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn'
     )
