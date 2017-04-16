@@ -1,6 +1,6 @@
 node {
     try {
-        docker.image("${dockerimage}").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/HomeGatewayCheckout:/home/bba/git-src") {
+        docker.image("ericchu0302/ubuntu14.04-mtk:v2").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/HomeGatewayCheckout:/home/bba/git-src") {
             sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 env_build'
             sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 boot_build'
             sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 kernel_build'
@@ -21,7 +21,15 @@ node {
     }
 }
 
-def dockerimage = "ericchu0302/ubuntu14.04-mtk:v2"
+def to = emailextrecipients([
+        [$class: 'CulpritsRecipientProvider'],
+        [$class: 'DevelopersRecipientProvider'],
+        [$class: 'RequesterRecipientProvider']
+])
+if(to != null && !to.isEmpty()) {
+    mail to: to, subject: "Vagrant Test has finished with ${currentBuild.result}",
+            body: "See ${env.BUILD_URL}"
+}
 
 def notifySuccessful() { 
     emailext (
@@ -39,7 +47,9 @@ def notifyFailed() {
       body: """<p>构建失败: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
         <p>项目：'${env.JOB_NAME}'</p>
         <p>第'${env.BUILD_NUMBER}'次构建</p>
-        <p>镜像：'${dockerimage}'</p>
+        <p>镜像：ericchu0302/ubuntu14.04-mtk:v2</p>
+        <p>修改者：'${env.CHANGE_AUTHOR}'</p>
+        <p>${BUILD_LOG}</p>
         <p><a href='${env.BUILD_URL}'>点击查看详细内容</a></p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
       to: 'dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn'
