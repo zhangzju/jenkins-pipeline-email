@@ -43,14 +43,13 @@ def notifySuccessful() {
 
 def notifyFailed() {
    emailext (
-      subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """<p>构建失败: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-        <p>项目：'${env.JOB_NAME}'</p>
-        <p>第'${env.BUILD_NUMBER}'次构建</p>
-        <p>镜像：ericchu0302/ubuntu14.04-mtk:v2</p>
-        <p>修改者：'${env.CHANGE_AUTHOR}'</p>
-        <p>${BUILD_LOG}</p>
-        <p><a href='${env.BUILD_URL}'>点击查看详细内容</a></p>""",
+      subject: "【Jenkins CI】FAILED: Project '${env.JOB_NAME}'",
+      body: """<h3>Build Failed:  '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</h3>
+        <p>Project Name：'${env.JOB_NAME}'</p>
+        <p>Build Times:'${env.BUILD_NUMBER}'</p>
+        <p>Docker images：ericchu0302/ubuntu14.04-mtk:v2</p>
+        <p>The author：'${env.CHANGE_AUTHOR}'</p>
+        <p><a href='${env.BUILD_URL}'>Click for details</a></p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
       to: 'dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn'
     )
