@@ -1,9 +1,4 @@
 node {
-    def TODAY = sh(script: "date \"+%Y-%m-%d\"",returnStdout: true).trim()
-    def YESTERDAY=sh(script: "date -d yesterday \"+%Y-%m-%d\"",returnStdout: true).trim()
-    
-    echo "get date information (today:${TODAY}, yesterday:${YESTERDAY})"
-    def CAUSE = sh(script: "cd /home/spjenkins/VR500newBuildImage/VR500new; git log -p -1|sed ':a;N;$!ba;s/\s+/<\/br>\n/g'",returnStdout: true).trim()
     try {
         docker.image("ubuntu14.04-bcm:v2").inside("-t -i -e TERM=linux -u root -v /home/spjenkins/VR500newBuildImage:/home/bba/git-src") {
             sh 'cd /home/bba/git-src/VR500new/build; make MODEL=PVW422T1200ACGV1 env_build'
@@ -22,8 +17,6 @@ node {
         throw e
     }
 }
-
-def CAUSE = sh(script: "cd /home/spjenkins/VR500newBuildImage/VR500new; git log -p -1",returnStdout: true).trim()
 
 def to = emailextrecipients([
         [$class: 'CulpritsRecipientProvider'],
@@ -56,7 +49,6 @@ def notifyFailed() {
         <p><b>Docker images :</b> ubuntu14.04-bcm:v2</p>
         <!--<p><b>The author :</b> '${env.CHANGE_AUTHOR}'</p>
         <p><a href='${env.BUILD_URL}'>Click for details</a></p>-->
-        <p><b>Cause :</b> '${CAUSE}'</p>
         <p><b>Console Message :</b> Please check the attachment</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
       to: 'raoul.oyang@tp-link.com lj.chu@tp-link.com double.syu@tp-link.com roy.huang@tp-link.com dondum.su@tp-link.com rex.lu@tp-link.com dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn',

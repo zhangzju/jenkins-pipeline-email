@@ -3,7 +3,7 @@ node {
     def YESTERDAY=sh(script: "date -d yesterday \"+%Y-%m-%d\"",returnStdout: true).trim()
     
     echo "get date information (today:${TODAY}, yesterday:${YESTERDAY})"
-    def CAUSE = sh(script: "cd /home/spjenkins/VR500newBuildImage/VR500new; git log -p -1|sed ':a;N;$!ba;s/\s+/<\/br>\n/g'",returnStdout: true).trim()
+    def CAUSE = sh(script: "cd /home/spjenkins/VR500newBuildImage/VR500new; git log -p -1",returnStdout: true).trim()
     try {
         docker.image("ubuntu14.04-bcm:v2").inside("-t -i -e TERM=linux -u root -v /home/spjenkins/VR500newBuildImage:/home/bba/git-src") {
             sh 'cd /home/bba/git-src/VR500new/build; make MODEL=PVW422T1200ACGV1 env_build'
