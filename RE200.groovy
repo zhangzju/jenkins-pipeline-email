@@ -1,8 +1,11 @@
 node {
     try {
-        docker.image("fb0").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/RE200(SP)v2_checkout:/home/bba/git-src") {
+        docker.image("fb0").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/RE200(SP)v2_checkout:/home/RE200") {
             // sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 env_build'
-            sh 'ls -al /home/bba/git-src; echo "OK"'
+            sh 'cd /home/RE200/;ls -al .; echo "OK"'
+            sh 'cd /home/RE200/platform_BBA1.5/build; make MODEL=RE200SPV2 env_build'
+            sh 'cd /home/RE200/platform_BBA1.5/build; make MODEL=RE200SPV2 tools_build'
+            sh 'cd /home/RE200/platform_BBA1.5/build; make MODEL=RE200SPV2 all'
         }
         notifySuccessful()
     } catch (e) {
@@ -17,10 +20,10 @@ def to = emailextrecipients([
         [$class: 'DevelopersRecipientProvider'],
         [$class: 'RequesterRecipientProvider']
 ])
-if(to != null && !to.isEmpty()) {
-    mail to: to, subject: "Vagrant Test has finished with ${currentBuild.result}",
-            body: "See ${env.BUILD_URL}"
-}
+// if(to != null && !to.isEmpty()) {
+//     mail to: to, subject: "Vagrant Test has finished with ${currentBuild.result}",
+//             body: "See ${env.BUILD_URL}"
+// }
 
 def notifySuccessful() {
     emailext (
@@ -28,7 +31,7 @@ def notifySuccessful() {
       body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
         <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-      to: 'dean.hsiao@tp-link.com zhangwei_w8284@tp-link.com.cn'
+      to: 'zhangwei_w8284@tp-link.com.cn pengjiong@tp-link.com.cn'
     )
  }
 
@@ -42,11 +45,11 @@ def notifyFailed() {
       body: """<h3>Build Failed:  '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</h3>
         <p><b>Project Name :</b> '${env.JOB_NAME}'</p>
         <p><b>Build Times :</b> '${env.BUILD_NUMBER}'</p>
-        <p><b>Trunk URL :</b> http://sohoiipfpublic.rd.tp-link.net/svn/ISP/Tender/xDSL/linux_mtk_VR500vTTHGW</p>
+        <p><b>Trunk URL :</b> https://spcodes.rd.tp-link.net/sw2/linux_mtk_RE200_SP_v2.git</p>
         <p><b>Docker images :</b> re200_sp_v2</p>
         <p><b>Console Message :</b> Please check the attachment</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-      to: 'zhangwei_w8284@tp-link.com.cn',
+      to: 'zhangwei_w8284@tp-link.com.cn pengjiong@tp-link.com.cn',
       attachLog: true, compressLog: true
     )
 }
