@@ -1,11 +1,12 @@
 node {
     try {
-        docker.image("fb0").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/RE200(SP)v2_checkout:/home/RE200") {
+        docker.image("fb0").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/RE200(SP)v2_checkout:/home/bba/git-src") {
             // sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 env_build'
-            sh 'cd /home/RE200/;ls -al .; echo "OK"'
-            sh 'cd /home/RE200/platform_BBA1.5/build; make MODEL=RE200SPV2 env_build'
-            sh 'cd /home/RE200/platform_BBA1.5/build; make MODEL=RE200SPV2 tools_build'
-            sh 'cd /home/RE200/platform_BBA1.5/build; make MODEL=RE200SPV2 all'
+            sh 'cd /home/bba/git-src/;ls -al .; echo "OK"'
+            sh 'cd /home/bba/git-src/platform_BBA1.5/build; make MODEL=RE200SPV2 env_build'
+            sh 'cd /home/bba/git-src/platform_BBA1.5/build; make MODEL=RE200SPV2 tools_build'
+            sh 'cd /home/bba/git-src/platform_BBA1.5/apps/public/iptables-1.4.17; sh RE200.sh'
+            sh 'cd /home/bba/git-src/platform_BBA1.5/build; make MODEL=RE200SPV2 all'
         }
         notifySuccessful()
     } catch (e) {
