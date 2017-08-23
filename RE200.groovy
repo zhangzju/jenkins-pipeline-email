@@ -5,7 +5,7 @@ node {
             sh 'cd /home/bba/git-src/;ls -al .; echo "OK"'
             sh 'cd /home/bba/git-src/platform_BBA1.5/build; make MODEL=RE200SPV2 env_build'
             sh 'cd /home/bba/git-src/platform_BBA1.5/build; make MODEL=RE200SPV2 tools_build'
-            sh 'cd /home/bba/git-src/platform_BBA1.5/apps/public/iptables-1.4.17; sh RE200.sh'
+            sh 'cd /home/bba/git-src/platform_BBA1.5/apps/public/iptables-1.4.17; sh RE200_SP_V2_Jenkins.sh'
             sh 'cd /home/bba/git-src/platform_BBA1.5/build; make MODEL=RE200SPV2 all'
         }
         notifySuccessful()
