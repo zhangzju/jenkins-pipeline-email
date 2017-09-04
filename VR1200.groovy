@@ -1,24 +1,17 @@
 node {
     try {
-        docker.image("fd2").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/GR1600vV1_checkout/TP_SDK:/code") {
+        docker.image("42f").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/VR1200v_checkout:/home/bba") {
             // sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 env_build'
-            sh 'cd /code;ls -al .; echo "OK"'
-            sh 'cd /code/4.16L.05/toolchain ;tar -jxvf crosstools-arm-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21-NPTL.Rel1.2.tar.bz2'
-            sh 'cd /code/build; make MODEL=GR1600vV1 boot_build '
-            sh 'cd /code/build; make MODEL=GR1600vV1 kernel_build '
-            sh 'cd /code/build; make MODEL=GR1600vV1 modules_build '
-            sh 'touch /code/apps/public/iptables-1.4.17/*'
-            sh 'cd /code/build; make iptables'
-            sh 'chmod +x /code/apps/public/nginx-1.8.0/configure'
-            sh 'cd /code/build; make MODEL=GR1600vV1 apps_build '
-            sh 'cd /code/build; make fakeroot_clean  '
-            sh 'cd /code/build; make hosttools '
-            sh 'cd /code/host_tools/fakeroot; rm -rf Makefile'
-            sh 'cd /code/host_tools/fakeroot; ./configure --prefix=/usr --disable-nls'
-            sh 'cd /code/host_tools/fakeroot; make '
-            sh 'cd /code/build; make fakeroot '
-            sh 'cd /code/build; make fs_build '
-            sh 'cd /code/build; make image_build '
+            sh 'cd /home/bba/;ls -al .; echo "OK"'
+            sh 'cd /home/bba/apps/public/ipsectools && touch * && cd -'
+            sh 'cd /home/bba/apps/public/libusb-1.0.8 && touch * && cd -'
+            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 env_build'
+            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 boot_build'
+            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 kernel_build'
+            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 modules_build'
+            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 apps_build'
+            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 fs_build'
+            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 image_build'
         }
         notifySuccessful()
     } catch (e) {
@@ -44,7 +37,7 @@ def notifySuccessful() {
       body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
         <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-      to: 'zhangwei_w8284@tp-link.com.cn chenming@tp-link.com.cn'
+      to: 'zhangwei_w8284@tp-link.com.cn dingcheng@tp-link.com.cn'
     )
  }
 
@@ -58,11 +51,11 @@ def notifyFailed() {
       body: """<h3>Build Failed:  '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</h3>
         <p><b>Project Name :</b> '${env.JOB_NAME}'</p>
         <p><b>Build Times :</b> '${env.BUILD_NUMBER}'</p>
-        <p><b>Trunk URL :</b> https://spcodes.rd.tp-link.net/sw3/GR1600vV1</p>
-        <p><b>Docker images :</b> gr1600v:0.1</p>
+        <p><b>Trunk URL :</b> https://spcodes.rd.tp-link.net/sw1/VR1200v.git</p>
+        <p><b>Docker images :</b>vr1200v</p>
         <p><b>Console Message :</b> Please check the attachment</p>""",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-      to: 'zhangwei_w8284@tp-link.com.cn chenming@tp-link.com.cn',
+      to: 'zhangwei_w8284@tp-link.com.cn dingcheng@tp-link.com.cn',
       attachLog: true, compressLog: true
     )
 }
