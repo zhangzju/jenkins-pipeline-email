@@ -3,15 +3,15 @@ node {
         docker.image("42f").inside("-t -i -e TERM=linux -u root -v /var/lib/jenkins/workspace/VR1200v_checkout:/home/bba") {
             // sh 'cd /home/bba/git-src/build; make MODEL=VR600_TT_V1 env_build'
             sh 'cd /home/bba/;ls -al .; echo "OK"'
-            sh 'cd /home/bba/apps/public/ipsectools && touch * && cd -'
-            sh 'cd /home/bba/apps/public/libusb-1.0.8 && touch * && cd -'
-            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 env_build'
-            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 boot_build'
-            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 kernel_build'
-            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 modules_build'
-            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 apps_build'
-            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 fs_build'
-            sh 'cd /home/bba/build; make MODEL= ArcherVR1200vSPV1 image_build'
+            sh 'cd /home/bba/apps/public/ipsectools && touch *'
+            sh 'cd /home/bba/apps/public/libusb-1.0.8 && touch *'
+            sh 'cd /home/bba/build; make MODEL=ArcherVR1200vSPV1 env_build'
+            sh 'cd /home/bba/build; make MODEL=ArcherVR1200vSPV1 boot_build'
+            sh 'cd /home/bba/build; make MODEL=ArcherVR1200vSPV1 kernel_build'
+            sh 'cd /home/bba/build; make MODEL=ArcherVR1200vSPV1 modules_build'
+            sh 'cd /home/bba/build; make MODEL=ArcherVR1200vSPV1 apps_build'
+            sh 'cd /home/bba/build; make MODEL=ArcherVR1200vSPV1 fs_build'
+            sh 'cd /home/bba/build; make MODEL=ArcherVR1200vSPV1 image_build'
         }
         notifySuccessful()
     } catch (e) {
